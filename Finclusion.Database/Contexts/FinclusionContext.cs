@@ -9,6 +9,8 @@ namespace Finclusion.Database.Contexts;
 public class FinclusionContext : IdentityDbContext<IdentityUser>
 {
     public DbSet<Account> Accounts { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Order> Orders { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
