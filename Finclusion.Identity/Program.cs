@@ -32,6 +32,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<FinclusionContext>();
 
+builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 
 // builder.Services.AddTransient<IFinclusionContext, FinclusionContext>(() => new FinclusionContext());
