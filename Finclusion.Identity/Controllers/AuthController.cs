@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Finclusion.Identity.Services;
+using Finclusion.Identity.Models;
 
 namespace Finclusion.Identity.Controllers;
 
@@ -16,23 +17,23 @@ public class AuthController : Controller
 
     [HttpGet]
     [Route("login/username={username}&password={password}")]
-    public async Task<IActionResult> Login(string username, string password)
+    public async Task<ActionResult<AuthResult>> Login(string username, string password)
     {
-        var token = await _authService.Login(username, password);
-        if(token == null)
+        var result = await _authService.Login(username, password);
+        if(result.Successful)
         {
-            return NotFound();
+            return Ok(result);
         }
-        return Ok(token);
+        return StatusCode(500, result);
     }
 
     [HttpPost]
     [Route("register/username={username}&password={password}")]
-    public async Task<IActionResult> Register(string username, string password)
+    public async Task<ActionResult<AuthResult>> Register(string username, string password)
     {
         var result = await _authService.Register(username, password);
 
-        if(result.Sucessful)
+        if(result.Successful)
         {
             return Ok(result);
         }

@@ -21,26 +21,52 @@ public class AuthService : IAuthService
         _signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
     }
 
-    public async Task<string?> Login(string username, string password)
+    public async Task<AuthResult> Login(string username, string password)
     {
-        var user = new IdentityUser { UserName = username };
+        var result = new AuthResult();
+
+        var user = await _userManager.FindByNameAsync(username);
+        if(user == null){
+            result.Successful = false;
+            result.Errors.Add(
+                new IdentityError() { 
+                    Code = "UserNotFound",
+                    Description = $"No user found with username {username}."
+                }
+            );
+            return result;    
+        }
+
         var passwordMatches = await _userManager.CheckPasswordAsync(user, password);
         if(passwordMatches)
         {
-            return await GenerateToken();
+            result.Successful = true;
+            result.Token = await GenerateToken();
+            return result;
         }
-        return null;
+        else
+        {
+            result.Successful = false;
+            result.Errors.Add(
+                new IdentityError()
+                {
+                    Code = "InvalidPassword",
+                    Description = $"Incorrect password for user {username}."
+                }
+            );
+            return result;
+        }
     }
 
-    public async Task<RegistrationResult> Register(string username, string password)
+    public async Task<AuthResult> Register(string username, string password)
     {
         var user = new IdentityUser { UserName = username };
         var result = await _userManager.CreateAsync(user, password);
 
-        return new RegistrationResult()
+        return new AuthResult()
         {
-            Sucessful = result.Succeeded,
-            Errors = result.Errors,
+            Successful = result.Succeeded,
+            Errors = result.Errors.ToList(),
             Token = result.Succeeded ? await GenerateToken() : null
         };
     }
