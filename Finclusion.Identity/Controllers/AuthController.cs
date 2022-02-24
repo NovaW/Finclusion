@@ -15,7 +15,7 @@ public class AuthController : Controller
         _authService = authService;
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("login/username={username}&password={password}")]
     public async Task<ActionResult<AuthResult>> Login(string username, string password)
     {
