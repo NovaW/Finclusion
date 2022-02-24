@@ -1,6 +1,7 @@
 using Finclusion.Database.Contexts;
 using Microsoft.AspNetCore.Identity;
 using Finclusion.Identity.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,12 +31,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<FinclusionContext>();
+
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+builder.Services.AddDbContext<FinclusionContext>(
+    options => options.UseSqlServer(connectionString)
+);
 
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
-
-// builder.Services.AddTransient<IFinclusionContext, FinclusionContext>(() => new FinclusionContext());
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<FinclusionContext>();
@@ -54,5 +57,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (IServiceScope scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                await scope.ServiceProvider.GetService<FinclusionContext>().Database.EnsureCreatedAsync();
+            }
 
 app.Run();

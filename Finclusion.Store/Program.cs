@@ -4,6 +4,7 @@ using Finclusion.Database.Contexts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var securityKey = Environment.GetEnvironmentVariable("SECURITY_KEY");
-builder.Services.AddDbContext<FinclusionContext>();
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+builder.Services.AddDbContext<FinclusionContext>(
+    options => options.UseSqlServer(connectionString)
+);
 
 builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

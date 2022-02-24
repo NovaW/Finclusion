@@ -1,0 +1,62 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_password123
+    ports:
+    - "1433:1433"
+  accounts:
+    build:
+      context: .
+      dockerfile: Finclusion.Accounts/Dockerfile
+    ports:
+      - "7050:7050"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:7050
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/dev_cert.pfx
+      - CONNECTION_STRING=Server=sqlserver,1433;Database=master;user=sa;Password=Your_password123;
+      - SECURITY_KEY=60d690f2-96a9-49d4-9a37-fa4603ced00d
+    volumes:
+      - ./conf.d/https/:/https/
+    depends_on:
+      - sqlserver
+  identity:
+    build:
+      context: .
+      dockerfile: Finclusion.Identity/Dockerfile
+    ports:
+      - "7054:7054"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:7054
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/dev_cert.pfx
+      - CONNECTION_STRING=Server=sqlserver,1433;Database=master;user=sa;Password=Your_password123;
+      - SECURITY_KEY=60d690f2-96a9-49d4-9a37-fa4603ced00d
+    volumes:
+      - ./conf.d/https/:/https/
+    depends_on:
+      - sqlserver
+  store:
+    build:
+      context: .
+      dockerfile: Finclusion.Store/Dockerfile
+    ports:
+      - "7160:7160"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:7160
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/dev_cert.pfx
+      - CONNECTION_STRING=Server=sqlserver,1433;Database=master;user=sa;Password=Your_password123;
+      - SECURITY_KEY=60d690f2-96a9-49d4-9a37-fa4603ced00d
+    volumes:
+      - ./conf.d/https/:/https/
+    depends_on:
+      - sqlserver

@@ -12,9 +12,5 @@ public class FinclusionContext : IdentityDbContext<IdentityUser>
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=Finclusion;Trusted_Connection=True;");
-    }
-
+    public FinclusionContext(DbContextOptions<FinclusionContext> options) : base(options) {}
 }
