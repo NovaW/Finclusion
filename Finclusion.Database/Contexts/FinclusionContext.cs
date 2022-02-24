@@ -1,4 +1,3 @@
-using System;
 using Finclusion.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -13,4 +12,15 @@ public class FinclusionContext : IdentityDbContext<IdentityUser>
     public DbSet<Order> Orders { get; set; }
 
     public FinclusionContext(DbContextOptions<FinclusionContext> options) : base(options) {}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Product>()
+              .HasData(
+               new Product { Id = 1, ProductName = "Chair", Cost = 50, Quantity = 7},
+               new Product { Id = 2, ProductName = "Table", Cost = 150, Quantity = 4},
+               new Product { Id = 3, ProductName = "Fridge", Cost = 230, Quantity = 2}
+               );
+    }
 }

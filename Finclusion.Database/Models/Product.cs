@@ -1,5 +1,3 @@
-using System;
-
 namespace Finclusion.Database.Models;
 
 public class Product

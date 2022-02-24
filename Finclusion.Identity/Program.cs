@@ -60,7 +60,7 @@ app.MapControllers();
 
 using (IServiceScope scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                await scope.ServiceProvider.GetService<FinclusionContext>().Database.EnsureCreatedAsync();
+                await scope.ServiceProvider.GetService<FinclusionContext>().Database.MigrateAsync();
             }
 
 app.Run();
