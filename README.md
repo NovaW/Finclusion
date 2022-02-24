@@ -25,7 +25,7 @@ curl --request POST \
 
 ### Logging in
 ```
-curl --request GET \
+curl --request POST \
   --url https://localhost:7054/api/auth/login/username=testAccount1%26password=ASFDkwEjiAWDMIW928@
 ```
 
