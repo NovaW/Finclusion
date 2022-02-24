@@ -1,6 +1,5 @@
 using Finclusion.Database.Models;
 using Finclusion.Database.Contexts;
-using System.Linq;
 
 namespace Finclusion.Store.Services;
 

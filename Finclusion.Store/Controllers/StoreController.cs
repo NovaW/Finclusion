@@ -25,7 +25,7 @@ public class StoreController : Controller
 
     [HttpPost]
     [Route("buy/{productId}")]
-    public async Task<IActionResult> BuyProduct(int productId)
+    public async Task<ActionResult<Order>> BuyProduct(int productId)
     {
         var identity = this.User.Identity as ClaimsIdentity;
         var claimUsername = identity?.FindFirst(ClaimTypes.Name).Value;   
