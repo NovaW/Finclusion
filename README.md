@@ -26,7 +26,7 @@ curl --request POST \
 ### Logging in
 ```
 curl --request POST \
-  --url https://localhost:7054/api/auth/login/username=testAccount1%26password=ASFDkwEjiAWDMIW928@
+  --url https://localhost:7054/api/auth/login/username={username}&password={password}
 ```
 
 ## Account Server
@@ -57,6 +57,6 @@ curl --request GET \
 ### Buy Product
 ```
 curl --request POST \
-  --url https://localhost:7160/api/store/buy/{product id} \
+  --url https://localhost:7160/api/store/buy/{productId} \
   --header 'Authorization: Bearer {token}'
 ```
