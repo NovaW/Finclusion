@@ -19,52 +19,32 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
-    [Route("AddFunds/username={username}&amount={amount}")]
-    public async Task<ActionResult<Account>> AddFunds(string username, int amount)
+    [Route("AddFunds/amount={amount}")]
+    public async Task<ActionResult<Account>> AddFunds(int amount)
     {
-        if(await VerifyUser(username))
-        {
-            var account = await _accountService.GetAccountByUserName(username);
-            if(account == null)
-            {
-                return NotFound();
-            }
+        var identity = this.User.Identity as ClaimsIdentity;
+        var claimUsername = identity?.FindFirst(ClaimTypes.Name).Value;
 
-            var result = await _accountService.AddFunds(account.Id, amount);
-            return Ok(result);
-        }
-        else
+        var result = await _accountService.AddFunds(claimUsername, amount);
+        if(result == null)
         {
-            return Unauthorized();
+            return NotFound();
         }
+        return Ok(result);
     }
 
     [HttpPost]
-    [Route("SubtractFunds/username={username}&amount={amount}")]
-    public async Task<ActionResult<Account>> SubtractFunds(string username, int amount)
+    [Route("SubtractFunds/amount={amount}")]
+    public async Task<ActionResult<Account>> SubtractFunds(int amount)
     {
-        if(await VerifyUser(username))
-        {
-            var account = await _accountService.GetAccountByUserName(username);
-            if(account == null)
-            {
-                return NotFound();
-            }
-
-            var result = await _accountService.SubtractFunds(account.Id, amount);
-            return Ok(result);
-        }
-        else
-        {
-            return Unauthorized();
-        }
-    }
-
-    private async Task<bool> VerifyUser(string username)
-    {
-        //I'm sure there's a cleaner way of doing this
         var identity = this.User.Identity as ClaimsIdentity;
         var claimUsername = identity?.FindFirst(ClaimTypes.Name).Value;
-        return claimUsername != null && claimUsername.Equals(username, StringComparison.InvariantCultureIgnoreCase);
+
+        var result = await _accountService.SubtractFunds(claimUsername, amount);
+        if(result == null)
+        {
+            return NotFound();
+        }
+        return Ok(result);
     }
 }
