@@ -34,14 +34,14 @@ curl --request POST \
 ### Adding Funds
 ```
 curl --request POST \
-  --url https://localhost:7050/api/Account/AddFunds/username={username}&amount={amount} \
+  --url https://localhost:7050/api/Account/AddFunds/amount={amount} \
   --header 'Authorization: Bearer {token}'
 ```
 
 ### Subtracting Funds
 ```
 curl --request POST \
-  --url https://localhost:7050/api/Account/SubtractFunds/username={username}&amount={amount} \
+  --url https://localhost:7050/api/Account/SubtractFunds/amount={amount} \
   --header 'Authorization: Bearer {token}'
 ```
 
