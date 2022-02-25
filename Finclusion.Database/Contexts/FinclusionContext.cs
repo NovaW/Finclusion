@@ -15,6 +15,8 @@ public class FinclusionContext : IdentityDbContext<IdentityUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CS_AS");
+
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Product>()
               .HasData(

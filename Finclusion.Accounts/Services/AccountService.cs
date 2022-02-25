@@ -13,7 +13,7 @@ public class AccountService : IAccountService
 
     public async Task<Account?> AddFunds(string username, int amount)
     {
-        var account = _dbContext.Accounts.FirstOrDefault(x => username.Equals(x.Username, StringComparison.InvariantCultureIgnoreCase));
+        var account = _dbContext.Accounts.FirstOrDefault(x => username.Equals(x.Username));
         if(account == null){ return null; }
         account.Balance += amount;
         await _dbContext.SaveChangesAsync();
@@ -22,7 +22,7 @@ public class AccountService : IAccountService
 
     public async Task<Account?> SubtractFunds(string username, int amount)
     {
-        var account = _dbContext.Accounts.FirstOrDefault(x => username.Equals(x.Username, StringComparison.InvariantCultureIgnoreCase));
+        var account = _dbContext.Accounts.FirstOrDefault(x => username.Equals(x.Username));
         if(account == null){ return null; }
         account.Balance -= amount;
         await _dbContext.SaveChangesAsync();

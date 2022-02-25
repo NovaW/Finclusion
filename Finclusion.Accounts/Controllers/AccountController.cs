@@ -28,7 +28,7 @@ public class AccountController : ControllerBase
         var result = await _accountService.AddFunds(claimUsername, amount);
         if(result == null)
         {
-            return NotFound();
+            return StatusCode(500, $"No matching user found for authentication token.");
         }
         return Ok(result);
     }
@@ -43,7 +43,7 @@ public class AccountController : ControllerBase
         var result = await _accountService.SubtractFunds(claimUsername, amount);
         if(result == null)
         {
-            return NotFound();
+            return StatusCode(500, $"No matching user found for authentication token.");
         }
         return Ok(result);
     }
